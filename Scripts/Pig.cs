@@ -24,8 +24,10 @@ public class Pig : MonoBehaviour
     private bool is_die = false;
     private bool is_cam_follow = false;
 
-    public void load()
+    private Game game;
+    public void load(Game game)
     {
+        this.game = game;
         this.hight_scores = PlayerPrefs.GetInt("hight_scores_"+this.name_hero,0);
         this.is_cam_follow = false;
     }
@@ -48,7 +50,7 @@ public class Pig : MonoBehaviour
 
     private void move_up()
     {
-        GameObject.Find("Game").GetComponent<Game>().play_sound(3);
+        game.play_sound(3);
         this.anim.Play("Move");
         rigidbody_pig.AddForce(transform.up * (distance_move+600f), ForceMode2D.Force);
     }
@@ -63,16 +65,16 @@ public class Pig : MonoBehaviour
             }
             else
             {
-                GameObject.Find("Game").GetComponent<Game>().play_sound(6);
+                game.play_sound(6);
                 this.die();
             }
         }
 
         if (collision.gameObject.name == "Coin")
         {
-            GameObject.Find("Game").GetComponent<Game>().play_sound(1);
-            GameObject.Find("Game").GetComponent<Game>().bk.add_coin();
-            GameObject.Find("Game").GetComponent<Game>().bk.add_scores(1);
+            game.play_sound(1);
+            game.bk.add_coin();
+            game.bk.add_scores(1);
             this.scores++;
             Destroy(collision.gameObject);
         }
@@ -99,10 +101,10 @@ public class Pig : MonoBehaviour
         if (collision.gameObject.name == "Food")
         {
             
-            GameObject.Find("Game").GetComponent<Game>().bk.create_effect(this.transform.position,1);
+            game.bk.create_effect(this.transform.position,1);
             Food food= collision.gameObject.GetComponent<Food>();
             this.eat_food(food.type);
-            GameObject.Find("Game").GetComponent<Game>().bk.show_item_use(food.sp_render.sprite);
+            game.bk.show_item_use(food.sp_render.sprite);
             Destroy(collision.gameObject);
         }
 
@@ -119,20 +121,20 @@ public class Pig : MonoBehaviour
 
     public void eat_food(int type_food)
     {
-        GameObject.Find("Game").GetComponent<Game>().play_sound(4);
+        game.play_sound(4);
         if (type_food == 5)
             this.act_undying();
         else if (type_food == 6)
-            GameObject.Find("Game").GetComponent<Game>().bk.freeze_all_Pedestal();
+            game.bk.freeze_all_Pedestal();
         else if (type_food == 7)
-            GameObject.Find("Game").GetComponent<Game>().bk.additional_stone_pedestal();
+            game.bk.additional_stone_pedestal();
         else if (type_food == 8)
             this.act_angry();
         else if (type_food == 9)
-            GameObject.Find("Game").GetComponent<Game>().bk.kill_all_animals();
+            game.bk.kill_all_animals();
         else
         {
-            GameObject.Find("Game").GetComponent<Game>().bk.add_scores(type_food);
+            game.bk.add_scores(type_food);
             this.act_pig();
         }
             
@@ -140,12 +142,12 @@ public class Pig : MonoBehaviour
 
     private void catch_animals(GameObject animals)
     {
-        GameObject.Find("Game").GetComponent<Game>().play_sound(6);
+        game.play_sound(6);
         if (this.is_big||this.is_undying||this.is_angry)
         {
             animals.GetComponent<BoxCollider2D>().enabled = false;
             animals.GetComponent<Rigidbody2D>().freezeRotation = false;
-            GameObject.Find("Game").GetComponent<Game>().bk.add_scores(1);
+            game.bk.add_scores(1);
             this.scores++;
         }
         else
@@ -158,7 +160,7 @@ public class Pig : MonoBehaviour
     {
         if (collision.gameObject.name == "Pedestal")
         {
-            if (this.is_big || this.Pedestal_cur != null) GameObject.Find("Game").GetComponent<Game>().bk.reset_all_speed_Pedestal();
+            if (this.is_big || this.Pedestal_cur != null) game.bk.reset_all_speed_Pedestal();
             this.Pedestal_cur = null;
         }
     }
@@ -176,7 +178,7 @@ public class Pig : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        GameObject.Find("Game").GetComponent<Game>().play_sound(6);
+        game.play_sound(6);
         this.die();
     }
 
@@ -187,8 +189,8 @@ public class Pig : MonoBehaviour
             this.timer_food += 0.1f * Time.deltaTime;
             if (this.timer_food > 1f)
             {
-                GameObject.Find("Game").GetComponent<Game>().play_sound(6);
-                if (this.is_big) GameObject.Find("Game").GetComponent<Game>().bk.reset_all_speed_Pedestal();
+                game.play_sound(6);
+                if (this.is_big) game.bk.reset_all_speed_Pedestal();
                 this.reset_act_food();
             }
         }
@@ -210,11 +212,11 @@ public class Pig : MonoBehaviour
     private void die()
     {
         this.is_die = true;
-        GameObject.Find("Game").GetComponent<Game>().panel_play.SetActive(false);
-        GameObject.Find("Game").GetComponent<Game>().act_vibrates();
-        GameObject.Find("Game").GetComponent<Game>().bk.create_effect(this.transform.position);
+        game.panel_play.SetActive(false);
+        game.act_vibrates();
+        game.bk.create_effect(this.transform.position);
         this.gameObject.SetActive(false);
-        GameObject.Find("Game").GetComponent<Game>().carrot.delay_function(1.5f, GameObject.Find("Game").GetComponent<Game>().show_game_over);
+        game.carrot.delay_function(1.5f, game.show_game_over);
     }
 
     private void reset_act_food()

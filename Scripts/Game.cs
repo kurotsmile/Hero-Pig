@@ -106,8 +106,8 @@ public class Game : MonoBehaviour, Carrot_Gamepad_Event
         this.carrot.game.set_list_button_gamepad_console(this.list_btn_main);
         this.pig2.gameObject.SetActive(false);
         this.shop.load_shop_game(this);
-        this.pig.load();
-        this.pig2.load();
+        this.pig.load(this);
+        this.pig2.load(this);
         this.camSmoothCamera.set_cam_follow(true);
         this.check_scene();
     }
