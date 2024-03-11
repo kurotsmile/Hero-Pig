@@ -60,7 +60,7 @@ public class Shop_Manager : MonoBehaviour
             Destroy(btn_buy.GetComponent<Button>());
         }
 
-        if (PlayerPrefs.GetInt("is_ads", 0) == 0)
+        if (game.carrot.ads.get_status_ads())
         {
             Carrot_Box_Item setting_item_removeads = box_shop.create_item();
             setting_item_removeads.set_icon(this.game.carrot.sp_icon_removeads);
@@ -85,12 +85,15 @@ public class Shop_Manager : MonoBehaviour
         btn_buy_coin.GetComponent<Image>().color = this.GetComponent<Game>().carrot.color_highlight;
         Destroy(btn_buy_coin.GetComponent<Button>());
 
+        if (game.carrot.os_app == OS.Android)
+        {
+            Carrot_Box_Item shop_item_gift_ads = box_shop.create_item();
+            shop_item_gift_ads.set_icon(this.icon_shop_gift);
+            shop_item_gift_ads.set_title("Watch ads to get rewards");
+            shop_item_gift_ads.set_tip("Finish watching ads to get +5 coins");
+            shop_item_gift_ads.set_act(this.view_ads_rewards);
+        }
 
-        Carrot_Box_Item shop_item_gift_ads = box_shop.create_item();
-        shop_item_gift_ads.set_icon(this.icon_shop_gift);
-        shop_item_gift_ads.set_title("Watch ads to get rewards");
-        shop_item_gift_ads.set_tip("Finish watching ads to get +5 coins");
-        shop_item_gift_ads.set_act(this.view_ads_rewards);
         box_shop.update_gamepad_cosonle_control();
     }
 
