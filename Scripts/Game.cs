@@ -109,7 +109,6 @@ public class Game : MonoBehaviour, Carrot_Gamepad_Event
         this.pig.load(this);
         this.pig2.load(this);
         this.camSmoothCamera.set_cam_follow(true);
-        this.check_scene();
     }
 
     private void check_exit_app()
@@ -403,20 +402,4 @@ public class Game : MonoBehaviour, Carrot_Gamepad_Event
         this.txt_coin_main.text = this.bk.get_your_coin().ToString();
     }
 
-    public void check_scene()
-    {
-        this.carrot.delay_function(1f, this.check_scene_rotation);
-    }
-
-    private void check_scene_rotation()
-    {
-        if (this.GetComponent<Carrot_DeviceOrientationChange>().get_status_portrait())
-        {
-            this.carrot.ads.Destroy_Banner_Ad();
-        }
-        else
-        {
-            this.carrot.ads.create_banner_ads();
-        }
-    }
 }
