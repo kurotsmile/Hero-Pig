@@ -1,6 +1,5 @@
 using Carrot;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,7 +37,6 @@ public class Game : MonoBehaviour, Carrot_Gamepad_Event
 
     [Header("Game sound")]
     public AudioSource[] sound;
-    bool is_sound = true;
 
     [Header("Gamepad")]
     public List<GameObject> list_btn_main;
@@ -55,7 +53,7 @@ public class Game : MonoBehaviour, Carrot_Gamepad_Event
 
         this.carrot.Load_Carrot(this.check_exit_app);
         this.carrot.shop.onCarrotPaySuccess += this.carrot_by_success;
-        this.carrot.ads.set_act_Rewarded_Success(this.on_Rewarded_Success);
+        this.carrot.ads.onRewardedSuccess+=this.on_Rewarded_Success;
         this.carrot.act_after_close_all_box = this.act_after_close_all_box;
 
         Carrot_Gamepad gamepad2 = this.carrot.game.create_gamepad("player_hero_2");
@@ -90,8 +88,6 @@ public class Game : MonoBehaviour, Carrot_Gamepad_Event
         gamepad1.set_gamepad_Joystick_right(this.gamepad_keydown_right);
         gamepad1.set_gamepad_Joystick_up(this.gamepad_keydown_up);
         gamepad1.set_gamepad_Joystick_down(this.gamepad_keydown_down);
-
-
 
         this.panel_menu.SetActive(true);
         this.panel_play.SetActive(false);
@@ -229,7 +225,7 @@ public class Game : MonoBehaviour, Carrot_Gamepad_Event
 
     public void play_sound(int index_sound=0)
     {
-        if(this.is_sound) this.sound[index_sound].Play();
+        if(this.carrot.get_status_sound()) this.sound[index_sound].Play();
     }
 
     public void random_weather()
